@@ -1,5 +1,7 @@
 package collection
 
+import "fmt"
+
 // Intensity describes how strong a fragrance projects.
 // The zero value means the intensity was not set.
 type Intensity int
@@ -10,3 +12,19 @@ const (
 	Strong
 	Beast
 )
+
+// ParseIntensity converts a value like "moderate" from collection.yaml
+// into an Intensity.
+func ParseIntensity(s string) (Intensity, error) {
+	switch s {
+	case "light":
+		return Light, nil
+	case "moderate":
+		return Moderate, nil
+	case "strong":
+		return Strong, nil
+	case "beast":
+		return Beast, nil
+	}
+	return 0, fmt.Errorf("invalid intensity %q (want light, moderate, strong or beast)", s)
+}
