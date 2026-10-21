@@ -28,3 +28,18 @@ func ParseIntensity(s string) (Intensity, error) {
 	}
 	return 0, fmt.Errorf("invalid intensity %q (want light, moderate, strong or beast)", s)
 }
+
+// String returns the name used in collection.yaml, e.g. "moderate".
+func (i Intensity) String() string {
+	switch i {
+	case Light:
+		return "light"
+	case Moderate:
+		return "moderate"
+	case Strong:
+		return "strong"
+	case Beast:
+		return "beast"
+	}
+	return "unknown"
+}
