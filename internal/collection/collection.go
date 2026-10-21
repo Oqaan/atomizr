@@ -29,5 +29,12 @@ func Load(path string) ([]Fragrance, error) {
 	if err != nil {
 		return nil, fmt.Errorf("parsing collection: %w", err)
 	}
+	// UnmarshalYAML is not called for keys that are missing entirely,
+	// so a missing intensity shows up as the zero value here.
+	for _, f := range fragrances {
+		if f.Intensity == 0 {
+			return nil, fmt.Errorf("fragrance %q: intensity is missing", f.Name)
+		}
+	}
 	return fragrances, nil
 }
