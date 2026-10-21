@@ -1,6 +1,10 @@
 package collection
 
-import "fmt"
+import (
+	"fmt"
+
+	"go.yaml.in/yaml/v3"
+)
 
 // Intensity describes how strong a fragrance projects.
 // The zero value means the intensity was not set.
@@ -42,4 +46,20 @@ func (i Intensity) String() string {
 		return "beast"
 	}
 	return "unknown"
+}
+
+// UnmarshalYAML lets the YAML library parse intensity values
+// with ParseIntensity, so typos are reported as errors.
+func (i *Intensity) UnmarshalYAML(value *yaml.Node) error {
+	var s string
+	err := value.Decode(&s)
+	if err != nil {
+		return err
+	}
+	parsed, err := ParseIntensity(s)
+	if err != nil {
+		return err
+	}
+	*i = parsed
+	return nil
 }
