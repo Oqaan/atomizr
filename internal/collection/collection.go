@@ -9,13 +9,13 @@ import (
 
 // Fragrance is a single fragrance in the user's collection.
 type Fragrance struct {
-	Name          string   `yaml:"name"`
-	Brand         string   `yaml:"brand"`
-	Family        string   `yaml:"family"`
-	Concentration string   `yaml:"concentration"`
-	Intensity     string   `yaml:"intensity"`
-	Seasons       []string `yaml:"seasons"`
-	Occasions     []string `yaml:"occasions"`
+	Name          string    `yaml:"name"`
+	Brand         string    `yaml:"brand"`
+	Family        string    `yaml:"family"`
+	Concentration string    `yaml:"concentration"`
+	Intensity     Intensity `yaml:"intensity"`
+	Seasons       []string  `yaml:"seasons"`
+	Occasions     []string  `yaml:"occasions"`
 }
 
 // Load reads and parses the collection file at path.
