@@ -1,7 +1,9 @@
 package cmd
 
 import (
+	"errors"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 
@@ -20,6 +22,9 @@ var listCmd = &cobra.Command{
 		path := filepath.Join(configDir, "atomizr", "collection.yaml")
 		fragrances, err := collection.Load(path)
 		if err != nil {
+			if errors.Is(err, fs.ErrNotExist) {
+				return fmt.Errorf("no collection found at %s\nCreate this file to add your fragrances.", path)
+			}
 			return err
 		}
 		fmt.Printf("Found %d fragrances.\n", len(fragrances))
