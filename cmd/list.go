@@ -6,6 +6,8 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
+	"text/tabwriter"
 
 	"github.com/Oqaan/atomizr/internal/collection"
 	"github.com/spf13/cobra"
@@ -27,8 +29,12 @@ var listCmd = &cobra.Command{
 			}
 			return err
 		}
-		fmt.Printf("Found %d fragrances.\n", len(fragrances))
-		return nil
+		w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
+		fmt.Fprintf(w, "NAME\tBRAND\tFAMILY\tINTENSITY\tSEASONS\tOCCASIONS\n")
+		for _, f := range fragrances {
+			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n", f.Name, f.Brand, f.Family, f.Intensity, strings.Join(f.Seasons, ", "), strings.Join(f.Occasions, ", "))
+		}
+		return w.Flush()
 	},
 }
 
