@@ -32,7 +32,7 @@ var listCmd = &cobra.Command{
 		w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
 		fmt.Fprintf(w, "NAME\tBRAND\tFAMILY\tINTENSITY\tSEASONS\tOCCASIONS\n")
 		for _, f := range fragrances {
-			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n", f.Name, f.Brand, f.Family, f.Intensity, strings.Join(f.Seasons, ", "), strings.Join(f.Occasions, ", "))
+			fmt.Fprintf(w, "%s\t%s\t%s\t%s\t%s\t%s\n", f.Name, f.Brand, f.Family, f.Intensity, strings.Join(f.Seasons, ", "), joinOccasions(f.Occasions))
 		}
 		return w.Flush()
 	},
@@ -41,4 +41,14 @@ var listCmd = &cobra.Command{
 // init registers the list command with the root command.
 func init() {
 	rootCmd.AddCommand(listCmd)
+}
+
+// joinOccasions formats occasions as "office, casual".
+// strings.Join only accepts []string, so each occasion is converted first.
+func joinOccasions(occasions []collection.Occasion) string {
+	var names []string
+	for _, o := range occasions {
+		names = append(names, o.String())
+	}
+	return strings.Join(names, ", ")
 }
