@@ -31,7 +31,16 @@ func Load(path string) ([]Fragrance, error) {
 	}
 	// Check required fields. UnmarshalYAML is not called for keys that
 	// are missing entirely, so they show up as zero values here.
-	for _, f := range fragrances {
+	for i, f := range fragrances {
+		if f.Name == "" {
+			return nil, fmt.Errorf("fragrance #%d: name is missing", i+1)
+		}
+		if f.Brand == "" {
+			return nil, fmt.Errorf("fragrance %q: brand is missing", f.Name)
+		}
+		if f.Family == "" {
+			return nil, fmt.Errorf("fragrance %q: family is missing", f.Name)
+		}
 		if f.Intensity == 0 {
 			return nil, fmt.Errorf("fragrance %q: intensity is missing", f.Name)
 		}
