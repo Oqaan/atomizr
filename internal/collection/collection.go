@@ -14,7 +14,7 @@ type Fragrance struct {
 	Family        string     `yaml:"family"`
 	Concentration string     `yaml:"concentration"`
 	Intensity     Intensity  `yaml:"intensity"`
-	Seasons       []string   `yaml:"seasons"`
+	Seasons       []Season   `yaml:"seasons"`
 	Occasions     []Occasion `yaml:"occasions"`
 }
 
