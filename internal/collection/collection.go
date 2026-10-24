@@ -14,7 +14,7 @@ type Fragrance struct {
 	Family        string     `yaml:"family"`
 	Concentration string     `yaml:"concentration"`
 	Intensity     Intensity  `yaml:"intensity"`
-	Seasons       []string   `yaml:"seasons"`
+	Seasons       []Season   `yaml:"seasons"`
 	Occasions     []Occasion `yaml:"occasions"`
 }
 
@@ -29,11 +29,26 @@ func Load(path string) ([]Fragrance, error) {
 	if err != nil {
 		return nil, fmt.Errorf("parsing collection: %w", err)
 	}
-	// UnmarshalYAML is not called for keys that are missing entirely,
-	// so a missing intensity shows up as the zero value here.
-	for _, f := range fragrances {
+	// Check required fields. UnmarshalYAML is not called for keys that
+	// are missing entirely, so they show up as zero values here.
+	for i, f := range fragrances {
+		if f.Name == "" {
+			return nil, fmt.Errorf("fragrance #%d: name is missing", i+1)
+		}
+		if f.Brand == "" {
+			return nil, fmt.Errorf("fragrance %q: brand is missing", f.Name)
+		}
+		if f.Family == "" {
+			return nil, fmt.Errorf("fragrance %q: family is missing", f.Name)
+		}
 		if f.Intensity == 0 {
 			return nil, fmt.Errorf("fragrance %q: intensity is missing", f.Name)
+		}
+		if len(f.Seasons) == 0 {
+			return nil, fmt.Errorf("fragrance %q: seasons are missing", f.Name)
+		}
+		if len(f.Occasions) == 0 {
+			return nil, fmt.Errorf("fragrance %q: occasions are missing", f.Name)
 		}
 	}
 	return fragrances, nil
